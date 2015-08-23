@@ -4,14 +4,15 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 package 'emacs'
-
-jenkins_plugin 'greenballs'
-jenkins_plugin 'github'
-
 package 'automake'
 package 'autoconf'
 package 'gettext-devel'
 package 'libtool'
+
+include_recipe 'jenkins::master'
+
+jenkins_plugin 'greenballs'
+jenkins_plugin 'github'
 
 xml = File.join(Chef::Config[:file_cache_path], 'test3-config.xml')
 
