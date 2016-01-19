@@ -8,11 +8,13 @@ package 'automake'
 package 'autoconf'
 package 'gettext-devel'
 package 'libtool'
+package 'git'
 
 include_recipe 'jenkins::master'
 
 jenkins_plugin 'greenballs'
 jenkins_plugin 'github'
+jenkins_plugin 'cmakebuilder'
 
 xml = File.join(Chef::Config[:file_cache_path], 'test3-config.xml')
 
