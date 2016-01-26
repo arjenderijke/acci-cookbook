@@ -6,4 +6,5 @@ description 'Installs/Configures aws_chef_jenkins'
 long_description 'Installs/Configures aws_chef_jenkins'
 version '0.1.0'
 
-depends 'jenkins',   '~> 2.3.1'
+depends 'jenkins', '~> 2.3.1'
+depends 'line',    '~> 0.6.3'
