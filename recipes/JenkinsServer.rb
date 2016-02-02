@@ -31,6 +31,14 @@ secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_
 secretsfile = File.read(secretsfilename)
 secretsobject = JSON.parse(secretsfile)
 
+secretsobject['jenkins_users']['passwords'].each do |password|
+  jenkins_password_credentials "#{password['name']}" do
+    username "#{password['username']}"
+    description "account #{password['username']} on slave"
+    password "#{password['password']}"
+  end
+end
+
 secretsobject['jenkins_users']['ssh_keys'].each do |sshkey|
   ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default', sshkey['keyname'])
   ssh_private_key = File.read(ssh_private_key_file)
