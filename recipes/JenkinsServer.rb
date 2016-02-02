@@ -27,12 +27,18 @@ service 'jenkins' do
   action [:reload]
 end
 
-ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/id_rsa_test')
-ssh_private_key = File.read(ssh_private_key_file)
-jenkins_private_key_credentials 'ec2-user-slave' do
-  username 'ec2-user'
-  description 'account ec2-user on slave'
-  private_key "#{ssh_private_key}"
+secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/', node['secretsfilename'])
+secretsfile = File.read(secretsfilename)
+secretsobject = JSON.parse(secretsfile)
+
+secretsobject['jenkins_users']['ssh_keys'].each do |sshkey|
+  ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default', sshkey['keyname'])
+  ssh_private_key = File.read(ssh_private_key_file)
+  jenkins_private_key_credentials "#{sshkey['name']}" do
+    username "#{sshkey['username']}"
+    description "account #{sshkey['username']} on slave"
+    private_key "#{ssh_private_key}"
+  end
 end
 
 layer = search("aws_opsworks_layer", "shortname:jenkinsslave").first
