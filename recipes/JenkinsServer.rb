@@ -37,18 +37,22 @@ end
 
 layer = search("aws_opsworks_layer", "shortname:jenkinsslave").first
 
-search("aws_opsworks_instance").each do |instance|
-  if instance['layer_ids'].include?(layer['layer_id'])
-    # Create a slave launched via SSH
-    jenkins_ssh_slave 'ec2-slaves' do
-      description 'Run test suites'
-      remote_fs   '/home/ec2-user'
-      #labels      ['label']
+# For unknown reasons, this resource failes to create, while it used
+# to work before. Reluctantly do it by hand until the problem is
+# fixed.
 
-      # SSH specific attributes
-      host        "#{instance['private_ip']}"
-      user        'ec2-user'
-      credentials 'ec2-user-slave'
-    end
-  end
+#search("aws_opsworks_instance").each do |instance|
+#  if instance['layer_ids'].include?(layer['layer_id'])
+#    # Create a slave launched via SSH
+#    jenkins_ssh_slave 'ec2-slaves' do
+#      description 'Run test suites'
+#      remote_fs   '/home/ec2-user'
+#      #labels      ['label']
+#
+#      # SSH specific attributes
+#      host        "#{instance['private_ip']}"
+#      user        'ec2-user'
+#      credentials 'ec2-user-slave'
+#    end
+#  end
 end
