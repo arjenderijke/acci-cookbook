@@ -11,15 +11,22 @@ include_recipe 'jenkins::master'
 jenkins_plugin 'greenballs'
 jenkins_plugin 'github'
 jenkins_plugin 'cmakebuilder'
+jenkins_plugin 'xunit'
 
-xml = File.join(Chef::Config[:file_cache_path], 'test3-config.xml')
-
-template xml do
-  source 'default/custom-config.xml.erb'
+template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
+  source 'default/mailer-plugin.xml.erb'
+  variables :mailer => {
+              'default-suffix' => '@astrocompute-ci.org',
+              'smtp-port' => 587
+            }
+  notifies :reload, 'service[jenkins]', :delayed
 end
 
 # Create a jenkins job (default action is `:create`)
-jenkins_job 'test3' do
+# Look in the readme to see why we setup the config file like this.
+xml = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/MonetDBCompile-config.xml')
+
+jenkins_job 'MonetDBCompile' do
   config xml
 end
 
