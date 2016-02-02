@@ -55,4 +55,4 @@ layer = search("aws_opsworks_layer", "shortname:jenkinsslave").first
 #      credentials 'ec2-user-slave'
 #    end
 #  end
-end
+#end
