@@ -63,16 +63,26 @@ layer = search("aws_opsworks_layer", "shortname:jenkinsslave").first
 
 search("aws_opsworks_instance").each do |instance|
   if instance['layer_ids'].include?(layer['layer_id'])
-    # Create a slave launched via SSH
-    jenkins_ssh_slave 'ec2-slaves' do
-      description 'Run test suites'
-      remote_fs   '/home/ec2-user'
-      #labels      ['label']
+    if (instance['os'] == 'Amazon Linux 2015.09')
+      jenkins_ssh_slave 'amzn-slave' do
+        description 'Run test suites on amazon linux'
+        remote_fs   '/home/ec2-user'
+        labels      ['amazon-linux-2015.09']
+        host        "#{instance['private_ip']}"
+        user        'ec2-user'
+        credentials '5cf1b49d-e886-421e-910d-01a97eba4ce1'
+      end
+    end
 
-      # SSH specific attributes
-      host        "#{instance['private_ip']}"
-      user        'ec2-user'
-      credentials '5cf1b49d-e886-421e-910d-01a97eba4ce1'
+    if (instance['os'] == 'Ubuntu 14.04 LTS')
+      jenkins_ssh_slave 'ubuntu-slave' do
+        description 'Run test suites on ubuntu'
+        remote_fs   '/home/ubuntu'
+        labels      ['ubuntu-14.04-lts']
+        host        "#{instance['private_ip']}"
+        user        'ubuntu'
+        credentials '4f9a2ab5-99b0-4af9-b452-2ed44eaba4f9'
+      end
     end
   end
 end
