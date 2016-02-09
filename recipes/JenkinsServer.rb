@@ -13,11 +13,17 @@ jenkins_plugin 'github'
 jenkins_plugin 'cmakebuilder'
 jenkins_plugin 'xunit'
 
+secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/', node['secretsfilename'])
+secretsfile = File.read(secretsfilename)
+secretsobject = JSON.parse(secretsfile)
+
 template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
   source 'default/mailer-plugin.xml.erb'
   variables :mailer => {
               'default-suffix' => '@astrocompute-ci.org',
-              'smtp-port' => 587
+              'smtp-port' => 587,
+              'smtp-username' => secretsobject['smtp'].first['username'],
+              'smtp-password' => secretsobject['smtp'].first['password']
             }
   notifies :reload, 'service[jenkins]', :delayed
 end
@@ -33,10 +39,6 @@ end
 service 'jenkins' do
   action [:reload]
 end
-
-secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/', node['secretsfilename'])
-secretsfile = File.read(secretsfilename)
-secretsobject = JSON.parse(secretsfile)
 
 secretsobject['jenkins_users']['passwords'].each do |password|
   jenkins_password_credentials "#{password['name']}" do
