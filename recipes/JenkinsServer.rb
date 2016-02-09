@@ -52,6 +52,7 @@ secretsobject['jenkins_users']['ssh_keys'].each do |sshkey|
   ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default', sshkey['keyname'])
   ssh_private_key = File.read(ssh_private_key_file)
   jenkins_private_key_credentials "#{sshkey['name']}" do
+    id "#{sshkey['id']}"
     username "#{sshkey['username']}"
     description "account #{sshkey['username']} on slave"
     private_key "#{ssh_private_key}"
@@ -60,22 +61,18 @@ end
 
 layer = search("aws_opsworks_layer", "shortname:jenkinsslave").first
 
-# For unknown reasons, this resource failes to create, while it used
-# to work before. Reluctantly do it by hand until the problem is
-# fixed.
+search("aws_opsworks_instance").each do |instance|
+  if instance['layer_ids'].include?(layer['layer_id'])
+    # Create a slave launched via SSH
+    jenkins_ssh_slave 'ec2-slaves' do
+      description 'Run test suites'
+      remote_fs   '/home/ec2-user'
+      #labels      ['label']
 
-#search("aws_opsworks_instance").each do |instance|
-#  if instance['layer_ids'].include?(layer['layer_id'])
-#    # Create a slave launched via SSH
-#    jenkins_ssh_slave 'ec2-slaves' do
-#      description 'Run test suites'
-#      remote_fs   '/home/ec2-user'
-#      #labels      ['label']
-#
-#      # SSH specific attributes
-#      host        "#{instance['private_ip']}"
-#      user        'ec2-user'
-#      credentials 'ec2-user-slave'
-#    end
-#  end
-#end
+      # SSH specific attributes
+      host        "#{instance['private_ip']}"
+      user        'ec2-user'
+      credentials '5cf1b49d-e886-421e-910d-01a97eba4ce1'
+    end
+  end
+end
