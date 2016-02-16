@@ -4,7 +4,7 @@
   <hudsonUrl>http://<%= @mailer['public-dns'] %>:8080/</hudsonUrl>
   <smtpAuthUsername><%= @mailer['smtp-username'] %></smtpAuthUsername>
   <smtpAuthPassword><%= @mailer['smtp-password'] %></smtpAuthPassword>
-  <replyToAddress>arjen.de.rijke@cwi.nl</replyToAddress>
+  <replyToAddress><%= @mailer['reply-to'] %></replyToAddress>
   <smtpHost>email-smtp.eu-west-1.amazonaws.com</smtpHost>
   <useSsl>false</useSsl>
   <smtpPort><%= @mailer['smtp-port'] %></smtpPort>

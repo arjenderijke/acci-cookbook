@@ -26,7 +26,8 @@ template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
               'smtp-port' => 587,
               'smtp-username' => secretsobject['smtp'].first['username'],
               'smtp-password' => secretsobject['smtp'].first['password'],
-              'public-dns' => server-instance['public_dns']
+              'public-dns' => server-instance['public_dns'],
+              'reply-to' => 'me@example.com'
             }
   notifies :reload, 'service[jenkins]', :delayed
 end
