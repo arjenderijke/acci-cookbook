@@ -27,7 +27,8 @@ template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
               'smtp-username' => secretsobject['smtp'].first['username'],
               'smtp-password' => secretsobject['smtp'].first['password'],
               'public-dns' => server-instance['public_dns'],
-              'reply-to' => 'me@example.com'
+              'reply-to' => 'me@example.com',
+              'smtp-host' => 'email-smtp.eu-west-1.amazonaws.com'
             }
   notifies :reload, 'service[jenkins]', :delayed
 end

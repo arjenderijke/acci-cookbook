@@ -5,7 +5,7 @@
   <smtpAuthUsername><%= @mailer['smtp-username'] %></smtpAuthUsername>
   <smtpAuthPassword><%= @mailer['smtp-password'] %></smtpAuthPassword>
   <replyToAddress><%= @mailer['reply-to'] %></replyToAddress>
-  <smtpHost>email-smtp.eu-west-1.amazonaws.com</smtpHost>
+  <smtpHost><% @mailer['smtp-host'] %></smtpHost>
   <useSsl>false</useSsl>
   <smtpPort><%= @mailer['smtp-port'] %></smtpPort>
   <charset>UTF-8</charset>
