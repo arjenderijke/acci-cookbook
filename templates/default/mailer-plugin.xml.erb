@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson.tasks.Mailer_-DescriptorImpl plugin="mailer@1.11">
   <defaultSuffix><%= @mailer['default-suffix'] %></defaultSuffix>
-  <hudsonUrl>http://ec2-52-28-244-10.eu-central-1.compute.amazonaws.com:8080/</hudsonUrl>
+  <hudsonUrl>http://<%= @mailer['public-dns'] %>:8080/</hudsonUrl>
   <smtpAuthUsername><%= @mailer['smtp-username'] %></smtpAuthUsername>
   <smtpAuthPassword><%= @mailer['smtp-password'] %></smtpAuthPassword>
   <replyToAddress>arjen.de.rijke@cwi.nl</replyToAddress>

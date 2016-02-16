@@ -17,13 +17,16 @@ secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_
 secretsfile = File.read(secretsfilename)
 secretsobject = JSON.parse(secretsfile)
 
+server-instance = search("aws_opsworks_instance", "self:true").first
+
 template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
   source 'default/mailer-plugin.xml.erb'
   variables :mailer => {
               'default-suffix' => '@astrocompute-ci.org',
               'smtp-port' => 587,
               'smtp-username' => secretsobject['smtp'].first['username'],
-              'smtp-password' => secretsobject['smtp'].first['password']
+              'smtp-password' => secretsobject['smtp'].first['password'],
+              'public-dns' => server-instance['public_dns']
             }
   notifies :reload, 'service[jenkins]', :delayed
 end
