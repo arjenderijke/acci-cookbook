@@ -12,6 +12,8 @@ jenkins_plugin 'greenballs'
 jenkins_plugin 'github'
 jenkins_plugin 'cmakebuilder'
 jenkins_plugin 'xunit'
+jenkins_plugin 'mercurial'
+jenkins_plugin 'multiple-scms'
 
 secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/', node['secretsfilename'])
 secretsfile = File.read(secretsfilename)
