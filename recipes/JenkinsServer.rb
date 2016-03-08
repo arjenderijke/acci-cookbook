@@ -42,6 +42,9 @@ unless serverinstance.nil?
 
   jenkins_job 'MonetDBCompile' do
     config xml
+    only_if {
+      node['jenkins_server']['jobs']['MonetDBCompile']['enabled']
+    }
   end
 
   service 'jenkins' do
