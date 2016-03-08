@@ -89,6 +89,7 @@ unless serverinstance.nil?
 
   template xml do
     source 'default/MonetDBCompile-config.xml.erb'
+    variables :recipients => secretsobject['recipients']
   end
 
   jenkins_job 'MonetDBCompile' do

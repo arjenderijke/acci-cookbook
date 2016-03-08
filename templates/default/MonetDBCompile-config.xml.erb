@@ -46,7 +46,7 @@ make install
   </builders>
   <publishers>
     <hudson.tasks.Mailer plugin="mailer@1.15">
-      <recipients>arjen.de.rijke@cwi.nl</recipients>
+      <recipients><%= @recipients %></recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
