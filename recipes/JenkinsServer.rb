@@ -87,6 +87,10 @@ unless serverinstance.nil?
   # Look in the readme to see why we setup the config file like this.
   xml = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/MonetDBCompile-config.xml')
 
+  template xml do
+    source 'default/MonetDBCompile-config.xml.erb'
+  end
+
   jenkins_job 'MonetDBCompile' do
     config xml
     only_if {
