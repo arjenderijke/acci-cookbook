@@ -14,7 +14,7 @@
     <disableChangeLog>false</disableChangeLog>
   </scm>
   <assignedNode>amazon-linux-2015.09</assignedNode>
-  <canRoam>true</canRoam>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
