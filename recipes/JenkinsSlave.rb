@@ -10,13 +10,30 @@ unless instance.nil?
   package 'emacs'
   package 'automake'
   package 'autoconf'
-  if (instance['os'] == 'Amazon Linux 2015.09')
-    package 'gettext-devel'
-  end
+  package 'bison'
+  package 'flex'
+  package 'make'
   package 'libtool'
   package 'git'
+  package 'mercurial'
+
+  if (instance['os'] == 'Amazon Linux 2015.09')
+    package 'gettext-devel'
+    package 'libxml2-devel'
+    package 'pcre-devel'
+    package 'openssl-devel'
+    package 'bzip2-devel'
+    package 'unixODBC-devel'
+  end
+
   if (instance['os'] == 'Ubuntu 14.04 LTS')
     package 'openjdk-7-jdk'
+    package 'libxml2-dev'
+    package 'libpcre3-dev'
+    package 'libssl-dev'
+    package 'libbz2-dev'
+    package 'libreadline-dev'
+    package 'unixodbc-dev'
   end
 
   ssh_public_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/id_rsa_test.pub')

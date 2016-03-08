@@ -36,21 +36,6 @@ unless serverinstance.nil?
     notifies :reload, 'service[jenkins]', :delayed
   end
 
-  # Create a jenkins job (default action is `:create`)
-  # Look in the readme to see why we setup the config file like this.
-  xml = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/MonetDBCompile-config.xml')
-
-  jenkins_job 'MonetDBCompile' do
-    config xml
-    only_if {
-      node['jenkins_server']['jobs']['MonetDBCompile']['enabled']
-    }
-  end
-
-  service 'jenkins' do
-    action [:reload]
-  end
-
   secretsobject['jenkins_users']['passwords'].each do |password|
     jenkins_password_credentials "#{password['name']}" do
       username "#{password['username']}"
@@ -96,5 +81,20 @@ unless serverinstance.nil?
         end
       end
     end
+  end
+
+  # Create a jenkins job (default action is `:create`)
+  # Look in the readme to see why we setup the config file like this.
+  xml = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/MonetDBCompile-config.xml')
+
+  jenkins_job 'MonetDBCompile' do
+    config xml
+    only_if {
+      node['jenkins_server']['jobs']['MonetDBCompile']['enabled']
+    }
+  end
+
+  service 'jenkins' do
+    action [:reload]
   end
 end
