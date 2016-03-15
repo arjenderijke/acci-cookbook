@@ -25,7 +25,7 @@ unless serverinstance.nil?
   template "#{node['jenkins']['master']['home']}/hudson.tasks.Mailer.xml" do
     source 'default/mailer-plugin.xml.erb'
     variables :mailer => {
-                'default-suffix' => '@astrocompute-ci.org',
+                'default-suffix' => "@#{node['domainname']}",
                 'smtp-port' => 587,
                 'smtp-username' => secretsobject['smtp'].first['username'],
                 'smtp-password' => secretsobject['smtp'].first['password'],
