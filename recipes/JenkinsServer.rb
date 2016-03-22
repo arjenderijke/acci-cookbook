@@ -31,7 +31,7 @@ unless serverinstance.nil?
                 'smtp-password' => secretsobject['smtp'].first['password'],
                 'public-dns' => serverinstance['public_dns'],
                 'reply-to' => node['replytoaddress'],
-                'smtp-host' => 'email-smtp.eu-west-1.amazonaws.com'
+                'smtp-host' => node['smtphostname']
               }
     notifies :reload, 'service[jenkins]', :delayed
   end
