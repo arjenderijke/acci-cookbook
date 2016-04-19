@@ -6,10 +6,11 @@
 package 'emacs'
 package 'git'
 
+cookbookname = 'aws_chef_jenkins'
 # Setup authentification
-ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/id_rsa')
+ssh_private_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks', cookbookname, 'files/default/id_rsa')
 ssh_private_key = File.read(ssh_private_key_file)
-ssh_public_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/id_rsa.pub')
+ssh_public_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks', cookbookname, 'files/default/id_rsa.pub')
 ssh_public_key = File.read(ssh_public_key_file)
 node.run_state[:jenkins_private_key] = ssh_private_key
 
@@ -20,14 +21,14 @@ jenkins_user 'Chef' do
   public_keys [ssh_public_key]
 end
 
-secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/', node['secretsfilename'])
+secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks', cookbookname, 'files/default/', node['secretsfilename'])
 secretsfile = File.read(secretsfilename)
 secretsobject = JSON.parse(secretsfile)
 
 jenkins_user 'admin' do
   full_name 'Admin'
-  email     secretsobject['recipients']
-  password  secretsobject['admin-password']
+  email     "#{secretsobject['recipients']}"
+  password  "#{secretsobject['admin_password']}"
 end
 
 template "#{node['jenkins']['master']['home']}/config.xml" do
@@ -118,7 +119,7 @@ unless serverinstance.nil?
 
   # Create a jenkins job (default action is `:create`)
   # Look in the readme to see why we setup the config file like this.
-  xml = File.join(Chef::Config[:file_cache_path], 'cookbooks/aws_chef_jenkins/files/default/MonetDBCompile-config.xml')
+  xml = File.join(Chef::Config[:file_cache_path], 'cookbooks', cookbookname, 'files/default/MonetDBCompile-config.xml')
 
   template xml do
     source 'default/MonetDBCompile-config.xml.erb'
