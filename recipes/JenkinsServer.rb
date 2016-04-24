@@ -14,11 +14,15 @@ ssh_public_key_file = File.join(Chef::Config[:file_cache_path], 'cookbooks', coo
 ssh_public_key = File.read(ssh_public_key_file)
 node.run_state[:jenkins_private_key] = ssh_private_key
 
+node.default['jenkins']['master']['version'] = '1.658-1.1'
+
 include_recipe 'jenkins::master'
 
 # Create the Jenkins user with the public key
 jenkins_user 'Chef' do
   public_keys [ssh_public_key]
+  retries 2
+  retry_delay 10
 end
 
 secretsfilename = File.join(Chef::Config[:file_cache_path], 'cookbooks', cookbookname, 'files/default/', node['secretsfilename'])
