@@ -50,6 +50,15 @@ template "#{node['jenkins']['master']['home']}/jenkins.security.QueueItemAuthent
   notifies :reload, 'service[jenkins]', :delayed
 end
 
+template "#{node['jenkins']['master']['home']}/jenkins.model.JenkinsLocationConfiguration.xml" do
+  source 'default/jenkins.model.JenkinsLocationConfiguration.xml.erb'
+  variables :location => {
+              'admin-address' => node['replytoaddress'],
+              'jenkins-url' => "http://#{node['serveralias']}.#{node['domainname']}/"
+            }
+  notifies :reload, 'service[jenkins]', :delayed
+end
+
 jenkins_plugin 'greenballs'
 jenkins_plugin 'github'
 jenkins_plugin 'cmakebuilder'
